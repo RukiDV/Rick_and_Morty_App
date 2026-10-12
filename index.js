@@ -15,7 +15,7 @@ let page = 1;
 let searchQuery = "";
 
 async function fetchCharacters() {
-  const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+  const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}&name=${searchQuery}`);
   const data = await response.json();
 
   // get max page infos from api and update display
@@ -33,6 +33,17 @@ async function fetchCharacters() {
 
   console.log(data);
 }
+
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const input = event.target.elements.query;
+  searchQuery = input ? input.value : "";
+
+  page = 1;
+  fetchCharacters();
+});
+
 
 nextButton.addEventListener("click", () => {
   if (page < maxPage)
