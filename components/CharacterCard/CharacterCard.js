@@ -1,4 +1,4 @@
-export function createCharacterCard()
+export function createCharacterCard(characterData)
 {
   const card = document.createElement("li");
 
