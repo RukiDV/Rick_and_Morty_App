@@ -1,4 +1,6 @@
 import { createCharacterCard } from "./components/CharacterCard/CharacterCard.js";
+import { initSearchbar } from "./components/SearchBar/SearchBar.js";
+
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
@@ -15,6 +17,12 @@ let page = 1;
 let searchQuery = "";
 // flag to track loading state and prevent 429 (yoo many requests) errors from rapid clicking
 let is_loading = false; 
+
+initSearchbar(searchBar, (text) => {
+  searchQuery = text;
+  page = 1;
+  fetchCharacters();
+});
   
 async function fetchCharacters()
 {
@@ -64,17 +72,6 @@ async function fetchCharacters()
     is_loading = false;
   }
 }
-
-searchBar.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const input = event.target.elements.query;
-  searchQuery = input ? input.value : "";
-
-  page = 1;
-  fetchCharacters();
-});
-
 
 nextButton.addEventListener("click", () => {
   if (page < maxPage && !is_loading)
