@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
 @import "components/CharacterCard/CharacterCard.css";
 @import "components/SearchBar/SearchBar.css";
 @import "components/NavButton/NavButton.css";
 @import "components/NavPagination/NavPagination.css";
+
 
 * {
   box-sizing: border-box;
@@ -13,12 +17,19 @@
   --color-primary: rgb(51, 51, 51);
   --color-secondary: #f6f6f6;
   --font-family: system-ui;
+  --color-bg-start: #0f172a; 
+  --color-bg-end: #1e1b4b;
+  --color-card-bg: rgba(30, 41, 59, 0.7);
+  --color-accent-green: #97ce4c;
+  --color-accent-blue: #00f2fe;
 }
 
 body {
   font-family: var(--font-family);
   color: var(--color-primary);
   padding: 20px;
+  background: linear-gradient(135deg, var(--color-bg-start), var(--color-bg-end));
+  background-attachment: fixed;
 }
 
 main {
@@ -28,5 +39,20 @@ main {
 }
 
 .title {
-  padding: 10px 0;
+  padding: 20px 0;
+  font-size: 3.8rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  font-family: 'Creepster', cursive, sans-serif;
+  text-align: center;
+  width: 100%;
+  color: var(--color-accent-blue);
+  -webkit-text-stroke: 1.5px #ffffff;
+
+  /* glowing effect (move right, move down, blur, color) */
+  text-shadow: 
+    0 0 10px var(--color-accent-green),
+    0 0 20px var(--color-accent-green),
+    0 0 10px var(--color-accent-green),
+    0 4px 10px rgba(0, 0, 0, 0.9);
 }
