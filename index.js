@@ -1,6 +1,7 @@
 import { createCharacterCard } from "./components/CharacterCard/CharacterCard.js";
 import { create_button } from "./components/NavButton/NavButton.js";
 import { create_pagination } from "./components/NavPagination/NavPagination.js";
+import { initSearchbar } from "./components/SearchBar/SearchBar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector('[data-js="search-bar-container"]');
@@ -51,6 +52,12 @@ function render_navigation()
 
   navigation_container.append(prev_button, pagination, next_button);
 }
+
+initSearchbar(searchBar, (text) => {
+  searchQuery = text;
+  page = 1;
+  fetchCharacters();
+});
   
 async function fetchCharacters()
 {
@@ -98,15 +105,5 @@ async function fetchCharacters()
     render_navigation();
   }
 }
-
-searchBar.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const input = event.target.elements.query;
-  searchQuery = input ? input.value : "";
-
-  page = 1;
-  fetchCharacters();
-});
 
 fetchCharacters();
