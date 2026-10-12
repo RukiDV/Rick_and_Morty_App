@@ -4,9 +4,7 @@ import { create_pagination } from "./components/NavPagination/NavPagination.js";
 import { initSearchbar } from "./components/SearchBar/SearchBar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
-const searchBarContainer = document.querySelector('[data-js="search-bar-container"]');
 const navigation_container = document.querySelector('[data-js="navigation"]');
-
 const searchBar = document.querySelector('[data-js="search-bar"]');
 
 // States
