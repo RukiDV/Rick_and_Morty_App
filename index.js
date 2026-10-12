@@ -14,28 +14,60 @@ let maxPage = 1;
 let page = 1;
 let searchQuery = "";
 
-async function fetchCharacters() {
-  const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
-  const data = await response.json();
+// flag to track loading state and prevent 429 (yoo many requests) errors from rapid clicking
+let is_loading = false; 
 
-  // get max page infos from api and update display
-  maxPage = data.info.pages;
-  pagination.textContent = `${page} / ${maxPage}`;
-  
-  updateButtonStates();
-  
-  cardContainer.innerHTML = "";
-  
-  data.results.forEach(characterData => {
-    const card = createCharacterCard(characterData);
-    cardContainer.append(card);
-  });
+async function fetchCharacters()
+{
+  if (is_loading) return;
+  is_loading = true;
 
-  console.log(data);
+  // immediately disable pagination buttons to prevent user interaction during fetch
+  prevButton.disabled = true;
+  nextButton.disabled = true;
+  
+  try
+  {
+    const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+    
+    if (!response.ok)
+    {
+      if (response.status === 429)
+      {
+        throw new Error("Too many clicks. Please wait a moment");
+      }
+      throw new Error("Error loading data");
+    }
+  
+    const data = await response.json();
+
+    // get max page infos from api and update display
+    maxPage = data.info.pages;
+    pagination.textContent = `${page} / ${maxPage}`;
+    
+    cardContainer.innerHTML = "";
+    
+    data.results.forEach(characterData => {
+      const card = createCharacterCard(characterData);
+      cardContainer.append(card);
+    });
+    
+    updateButtonStates();
+    
+  }
+  catch (error)
+  {
+    console.warn("Warning:", error.message);
+    updateButtonStates();
+  }
+  finally
+  {
+    is_loading = false;
+  }
 }
 
 nextButton.addEventListener("click", () => {
-  if (page < maxPage)
+  if (page < maxPage && !is_loading)
   {
     page++;
     fetchCharacters();
@@ -43,7 +75,7 @@ nextButton.addEventListener("click", () => {
 });
 
 prevButton.addEventListener("click", () => {
-  if (page > 1)
+  if (page > 1 && !is_loading)
   {
     page--;
     fetchCharacters();
