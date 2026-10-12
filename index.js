@@ -1,22 +1,57 @@
 import { createCharacterCard } from "./components/CharacterCard/CharacterCard.js";
+import { create_button } from "./components/NavButton/NavButton.js";
+import { create_pagination } from "./components/NavPagination/NavPagination.js";
 import { initSearchbar } from "./components/SearchBar/SearchBar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
-const searchBarContainer = document.querySelector(
-  '[data-js="search-bar-container"]'
-);
+const searchBarContainer = document.querySelector('[data-js="search-bar-container"]');
+const navigation_container = document.querySelector('[data-js="navigation"]');
+
 const searchBar = document.querySelector('[data-js="search-bar"]');
-const navigation = document.querySelector('[data-js="navigation"]');
-const prevButton = document.querySelector('[data-js="button-prev"]');
-const nextButton = document.querySelector('[data-js="button-next"]');
-const pagination = document.querySelector('[data-js="pagination"]');
 
 // States
 let maxPage = 1;
 let page = 1;
 let searchQuery = "";
-// flag to track loading state and prevent 429 (yoo many requests) errors from rapid clicking
-let is_loading = false; 
+// flag to track loading state and prevent 429 (too many requests) errors from rapid clicking
+let is_loading = false;
+
+function render_navigation()
+{
+  navigation_container.innerHTML = "";
+
+  // prev button
+  const prev_button = create_button({
+    text: "previous",
+    onClick: async () => {
+      if (is_loading || page <= 1) return;
+      page--;
+      await fetchCharacters();
+    },
+  });
+
+  prev_button.classList.add("button--prev");
+  prev_button.setAttribute("data-js", "button-prev");
+  prev_button.disabled = page <= 1 || is_loading;
+
+  const pagination = create_pagination(page, maxPage);
+
+  // next button
+  const next_button = create_button({
+    text: "next",
+    onClick: async () => {
+      if (is_loading || page >= maxPage) return;
+      page++;
+      await fetchCharacters();
+    },
+  });
+  
+  next_button.classList.add("button--next");
+  next_button.setAttribute("data-js", "button-next");
+  next_button.disabled = page >= maxPage || is_loading;
+
+  navigation_container.append(prev_button, pagination, next_button);
+}
 
 initSearchbar(searchBar, (text) => {
   searchQuery = text;
@@ -29,9 +64,7 @@ async function fetchCharacters()
   if (is_loading) return;
   is_loading = true;
 
-  // immediately disable pagination buttons to prevent user interaction during fetch
-  prevButton.disabled = true;
-  nextButton.disabled = true;
+  render_navigation();
   
   try
   {
@@ -50,7 +83,6 @@ async function fetchCharacters()
 
     // get max page infos from api and update display
     maxPage = data.info.pages;
-    pagination.textContent = `${page} / ${maxPage}`;
     
     cardContainer.innerHTML = "";
     
@@ -58,57 +90,19 @@ async function fetchCharacters()
       const card = createCharacterCard(characterData);
       cardContainer.append(card);
     });
-    
-    updateButtonStates();
+
+    render_navigation();
     
   }
   catch (error)
   {
     console.warn("Warning:", error.message);
-    updateButtonStates();
+    render_navigation();
   }
   finally
   {
     is_loading = false;
-  }
-}
-
-nextButton.addEventListener("click", () => {
-  if (page < maxPage && !is_loading)
-  {
-    page++;
-    fetchCharacters();
-  }
-});
-
-prevButton.addEventListener("click", () => {
-  if (page > 1 && !is_loading)
-  {
-    page--;
-    fetchCharacters();
-  }
-});
-
-
-// checks if the buttons has to be disabled at begin and end of page
-function updateButtonStates()
-{
-  if (page <= 1)
-  {
-    prevButton.disabled = true;
-  }
-  else
-  {
-    prevButton.disabled = false;
-  }
-
-  if (page >= maxPage)
-  {
-    nextButton.disabled = true;
-  }
-  else
-  {
-    nextButton.disabled = false;
+    render_navigation();
   }
 }
 
