@@ -13,10 +13,9 @@ const pagination = document.querySelector('[data-js="pagination"]');
 let maxPage = 1;
 let page = 1;
 let searchQuery = "";
-
 // flag to track loading state and prevent 429 (yoo many requests) errors from rapid clicking
 let is_loading = false; 
-
+  
 async function fetchCharacters()
 {
   if (is_loading) return;
@@ -28,7 +27,7 @@ async function fetchCharacters()
   
   try
   {
-    const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+    const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}&name=${searchQuery}`);
     
     if (!response.ok)
     {
@@ -65,6 +64,17 @@ async function fetchCharacters()
     is_loading = false;
   }
 }
+
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const input = event.target.elements.query;
+  searchQuery = input ? input.value : "";
+
+  page = 1;
+  fetchCharacters();
+});
+
 
 nextButton.addEventListener("click", () => {
   if (page < maxPage && !is_loading)
