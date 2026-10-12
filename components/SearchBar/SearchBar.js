@@ -9,5 +9,6 @@ searchBarElement.addEventListener("submit", (event) => {
   //page = 1;
   //fetchCharacters();
   onSubmit(value);
+  event.target.reset();
 });
 }
