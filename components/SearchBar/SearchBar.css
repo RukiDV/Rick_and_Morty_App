@@ -1,11 +1,17 @@
 .search-bar-container {
-  width: 300px;
+  width: 100%;
+  max-width: 2220px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .search-bar {
+  width: 300px;
   padding: 10px 20px;
-  background-color: var(--color-secondary);
+  background-color: var(--color-card-bg);
   display: grid;
   grid-template-columns: 1fr 24px;
   border-radius: 5px;
