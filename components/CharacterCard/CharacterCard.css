@@ -34,6 +34,18 @@
   text-align: right;
   color: var(--color-accent-green);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.card__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 60%;
+  display: inline-block;
+  box-shadow: 0 0 6px currentColor;
 }
 
 li {
