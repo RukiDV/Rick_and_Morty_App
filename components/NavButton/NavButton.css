@@ -11,7 +11,9 @@
   border: 2px solid #a6ff00;
   background-color: #1a1f2c;
   color: #24fbff;
-  font-weight: bold;
+  font-family: 'Creepster', cursive;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
@@ -43,3 +45,8 @@
   color:#24fbff;
   font-weight: bold;
 }
+
+.button--next {
+  margin-left: -20px; /* Ändere die Zahl (z.B. -15px oder -25px), bis es für dich perfekt aussieht! */
+}
+
